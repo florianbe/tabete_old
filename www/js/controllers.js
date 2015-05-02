@@ -47,6 +47,7 @@ angular.module('tabete.controllers', [])
     if($scope.settings.passwordset){
       if($scope.settings.password === $scope.input.password){
         $scope.settings.password = "";
+        $scope.input.password = "";
         $scope.settings.passwordset = false;
         $scope.closePassword();
       }

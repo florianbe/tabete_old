@@ -1,6 +1,6 @@
-angular.module('tabete.controllers', [])
+var controllers = angular.module('tabete.controllers', ['ngCordova', 'tabete.services']);
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $localstorage) {
+controllers.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicSideMenuDelegate, $localstorage) {
   // Create the password modal that we will use later
   $ionicModal.fromTemplateUrl('templates/password.html', {
     scope: $scope
@@ -65,11 +65,14 @@ angular.module('tabete.controllers', [])
   };
 })
 
-.controller('StudiesCtrl', function($scope, $ionicModal) {
+
+.controller('StudiesCtrl', function($scope, $ionicModal, $cordovaBarcodeScanner, $http, newStudyFactory) {
   $scope.studies = [
     { title: 'Zeitverwendung im Studienalltag', id: 1 },
     { title: 'Langeweile im Praktikum', id: 2 }
   ];
+
+  $scope.newStudyInput = {};
 
   $ionicModal.fromTemplateUrl('templates/addstudy.html', {
     scope: $scope
@@ -77,18 +80,41 @@ angular.module('tabete.controllers', [])
     $scope.modalNewStudy = modal;
   });
 
+  var testHttpFunction = function() {
+    var url = "http://anthill-inside.net/tabea_test/api/v1/study/1?password=zeitver2015";
+    // var url = "http://tabea.dev:8080/api/v1/study/1?password=geheim";
+    // var url = "http://tabea.dev:8080/api/v1/study/getid?study=te_stu&password=geheim";
+    $http.get(url).then(function(data) {
+      console.log(data.data.study.title);
+  })
+  };
+  
   $scope.showNewStudy = function() {
-    $scope.modalNewStudy.show();
+    //$scope.modalNewStudy.show();
+    $scope.studystuff = testHttpFunction();
+    
   };
 
   $scope.closeNewStudy = function() {
+    
+    $scope.newStudyInput = {};
     $scope.modalNewStudy.hide();
   };
 
+  
+
   $scope.scanNewStudy = function() {
+      
+      // var url = 'http://www.anthill-inside.net/tabea_test?study=te_stu&password=te_stu';
 
-  }
+      $cordovaBarcodeScanner.scan().then(function(imageData) {
+            var url = imageData.text;
+            $scope.newStudyInput = newStudyFactory.getStudyDataFromUrl(url);
 
+        }, function(error) {
+            alert('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es noch einmal.');
+        });
+    };
 })
 
 .controller('QuestionGroupCtrl', function($scope, $stateParams) {

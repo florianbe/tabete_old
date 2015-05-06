@@ -1,6 +1,6 @@
 <ion-view view-title="Studienübersicht">
   <ion-nav-buttons side="right">
-      <button class="button button-clear" ng-click="showNewStudy()">
+      <button class="button button-clear" >
         <i class="icon ion-plus-circled"></i>
       </button>
     </ion-nav-buttons>
@@ -10,6 +10,8 @@
         {{study.title}}
       </ion-item>
     </ion-list>
+    <pre>{{studystuff | json}}</pre>
+	<button class="button button-block icon-left ion-plus-circled button-positive" ng-click="showNewStudy()">Neue Studie hinzufügen</button>	
     <h1>{{settings.testmode}}</h1>
   </ion-content>
   <ion-footer-bar class="bar-energized" ng-if="settings.testmode">

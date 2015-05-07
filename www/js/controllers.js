@@ -86,12 +86,13 @@ controllers.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionic
     // var url = "http://tabea.dev:8080/api/v1/study/getid?study=te_stu&password=geheim";
     $http.get(url).then(function(data) {
       console.log(data.data.study.title);
+      $scope.studystuff =  data.data.study.title;
   })
   };
   
   $scope.showNewStudy = function() {
     //$scope.modalNewStudy.show();
-    $scope.studystuff = testHttpFunction();
+    testHttpFunction();
     
   };
 

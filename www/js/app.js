@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 var tabete = angular.module('tabete', ['ionic', 'ionic.utils', 'ngCordova', 'tabete.services', 'tabete.controllers' ]);
 
-tabete.run(function($ionicPlatform) {
+tabete.run(function($ionicPlatform, dataAccessLayer) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,6 +17,10 @@ tabete.run(function($ionicPlatform) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    //db = $cordovaSQLite.openDB({ name: "tabete.db" });
+    db = window.openDatabase("tabete.db", "1.0", "Cordova Demo", 200000);
+    dataAccessLayer.initDatabase();
+
   });
 });
 

@@ -1,7 +1,7 @@
 <ion-view view-title="Studienübersicht">
   <ion-nav-buttons side="right">
-      <button class="button button-clear" >
-        <i class="icon ion-plus-circled"></i>
+      <button class="button button-clear" ng-click="synchronizeData()">
+        <i class="icon ion-refresh"></i>
       </button>
     </ion-nav-buttons>
   <ion-content ng-class="{'has-footer': settings.testmode}">

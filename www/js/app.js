@@ -17,8 +17,7 @@ tabete.run(function($ionicPlatform, dataAccessLayer) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    //db = $cordovaSQLite.openDB({ name: "tabete.db" });
-    db = window.openDatabase("tabete.db", "1.0", "Cordova Demo", 200000);
+   
     dataAccessLayer.initDatabase();
 
   });
@@ -54,5 +53,5 @@ tabete.config(function($stateProvider, $urlRouterProvider) {
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/studies');
+  $urlRouterProvider.otherwise('app.studies');
 });

@@ -66,7 +66,16 @@ controllers.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionic
 })
 
 
-.controller('StudiesCtrl', function($scope, $ionicModal, $cordovaBarcodeScanner, $http, newStudyFactory) {
+.controller('StudiesCtrl', function($scope, $ionicModal, $cordovaBarcodeScanner, studyDataFactory, dataAccessLayer, $http ) {
+  
+  // Create Modal for adding new studies
+  $ionicModal.fromTemplateUrl('templates/addstudy.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modalNewStudy = modal;
+  });
+
+  // Data
   $scope.studies = [
     { title: 'Zeitverwendung im Studienalltag', id: 1 },
     { title: 'Langeweile im Praktikum', id: 2 }
@@ -74,26 +83,20 @@ controllers.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionic
 
   $scope.newStudyInput = {};
 
-  $ionicModal.fromTemplateUrl('templates/addstudy.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modalNewStudy = modal;
-  });
-
+  //DEV
   var testHttpFunction = function() {
-    var url = "http://anthill-inside.net/tabea_test/api/v1/study/1?password=zeitver2015";
-    // var url = "http://tabea.dev:8080/api/v1/study/1?password=geheim";
+    // var url = "http://anthill-inside.net/tabea_test/api/v1/study/1?password=zeitver2015";
+    var url = "http://tabea.dev:8080/api/v1/study/1?password=geheim";
     // var url = "http://tabea.dev:8080/api/v1/study/getid?study=te_stu&password=geheim";
     $http.get(url).then(function(data) {
       console.log(data.data.study.title);
+      var is_valid = studyDataFactory.validateStudyData(data.data.study);
       $scope.studystuff =  data.data.study.title;
   })
   };
   
   $scope.showNewStudy = function() {
-    //$scope.modalNewStudy.show();
-    testHttpFunction();
-    
+    $scope.modalNewStudy.show();
   };
 
   $scope.closeNewStudy = function() {
@@ -102,7 +105,10 @@ controllers.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionic
     $scope.modalNewStudy.hide();
   };
 
-  
+  $scope.synchronizeData = function() {
+    testHttpFunction();
+  };
+  $scope.devTest = dataAccessLayer.getSubjectId('www.heise.de');
 
   $scope.scanNewStudy = function() {
       
@@ -110,7 +116,7 @@ controllers.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionic
 
       $cordovaBarcodeScanner.scan().then(function(imageData) {
             var url = imageData.text;
-            $scope.newStudyInput = newStudyFactory.getStudyDataFromUrl(url);
+            $scope.newStudyInput = studyDataFactory.getStudyAcccessDataFromUrl(url);
 
         }, function(error) {
             alert('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es noch einmal.');
